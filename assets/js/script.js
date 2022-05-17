@@ -43,7 +43,42 @@ var loadTasks = function() {
 
 var saveTasks = function() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
-};
+}; 
+
+$(".list-group").on("click", "p", function(){
+  var text = $(this).text().trim();
+  var textInput = $("<textarea>")
+  .addClass("form-control")
+  .val(text);
+  $(this).replaceWith(textInput);
+  textInput.trigger("focus");
+});
+
+$(".list-group").on("blur", "textarea", function(){
+  //get the textarea's current value/text
+  var text = $(this)
+  .val()
+  .trim();
+
+  //recreate p element
+  var taskP =$("<p>")
+  .addClass("m-1")
+  .text(text);
+
+  //replace textarea with p element
+  $(this).replaceWith(taskP);
+
+  //get the parent ul's id attribute
+  var status = $(this)
+  .closest(".list-group")
+  .attr("id")
+  .replace("list-","");
+
+  //get the task's position in the list of other li elements
+  var indext = $(this)
+  .closest(".list-group-item")
+  .index();
+});
 
 
 
@@ -89,6 +124,10 @@ $("#remove-tasks").on("click", function() {
     $("#list-" + key).empty();
   }
   saveTasks();
+  $(".list-group").on("click", "p", function(){
+    var text = $(this).text();
+    console.log("this");
+  });
 });
 
 // load tasks for the first time
